@@ -84,7 +84,7 @@ These tests use Playwright’s `request` fixture rather than a separate HTTP cli
 ├─ package-lock.json
 ├─ playwright-report/      # HTML report output (generated)
 └─ test-results/           # Raw test run output (generated)
-
+```
 ---
 
 ### Getting Started
