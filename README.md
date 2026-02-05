@@ -71,7 +71,7 @@ These tests use Playwright’s `request` fixture rather than a separate HTTP cli
 
 ## Project Structure
 
-````text
+```text
 .
 ├─ helpers/                # Reusable helper functions for UI flows & locators
 ├─ tests/                  # All test specs live here
@@ -85,61 +85,66 @@ These tests use Playwright’s `request` fixture rather than a separate HTTP cli
 ├─ playwright-report/      # HTML report output (generated)
 └─ test-results/           # Raw test run output (generated)
 ```
+
 ---
 
-### Getting Started
+# Getting Started
 
-# 1. Install dependencies
+#### 1. Install dependencies
 
-```npm install``
+`npm install`
 
-# 2. Install Playwright browsers
+#### 2. Install Playwright browsers
+
 This wil download the browser binaries (Chromium, Firefox, WebKit) used by Playwright.
 
-```npx playwright install```
+`npx playwright install`
 
+## Running Tests
 
-### Running Tests
+#### Run the full test suite
 
-# Run the full test suite
+`npx playwright test`
 
-``` npx playwright test```
+#### Run a specific test file
 
-# Run a specific test file
+`npx playwright test tests/login.spec.ts`
 
-```npx playwright test tests/login.spec.ts```
+#### Run tests by title
 
-# Run tests by title
+`npx playwright test -g "invalid login"`
 
-```npx playwright test -g "invalid login"
+#### Run with headed browser (see the UI)
 
-# Run with headed browser (see the UI)
+`npx playwright test --headed`
 
-```npx playwright test --headed```
+#### Show the last HTML report
 
-# Show the last HTML report
 This opens an interactive report showing passed/failed tests, timings, and traces.
 
-```npx playwright show-report```
+`npx playwright show-report`
 
-### Notes on Design
+---
+
+# Notes on Design
+
 - Functional page model:
-    * Intead of using classes with this, this project uses functions + shared locators in helpers/ to implement page-level behavior. This keeps things simple and explicit while still avoiding duplication.
+  - Intead of using classes with this, this project uses functions + shared locators in helpers/ to implement page-level behavior. This keeps things simple and explicit while still avoiding duplication.
 
 - Separation of concerns:
-    * UI tests focus on user behavior and visible outcomes.
-    * API tests focus on HTTP status codes and JSON payloads.
+  - UI tests focus on user behavior and visible outcomes.
+  - API tests focus on HTTP status codes and JSON payloads.
 
 - Extensibility:
-   New flows can be added by:
-    * Introducing new helper functions in helpers/
-    * Adding new *.spec.ts files in tests/ that resuse those helpers
+  New flows can be added by:
+  - Introducing new helper functions in helpers/
+  - Adding new \*.spec.ts files in tests/ that resuse those helpers
 
 ### Possible Future Enhancements
+
 - Add negative API tests (e.g. 404s, validation errors)
 - Add more UI scenarios (sorting, cart behavior, etc.)
 - Configure GitHub Actions to run npx playwright test on every push
 - Capture screenshots and traces only on failure for easier debugging
 
 If you're reviewing this for a QA / SDET / Test Automation role and would like more context on any design decisions or test cases, feel free to reach out!
-````
