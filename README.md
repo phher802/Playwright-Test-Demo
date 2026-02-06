@@ -92,55 +92,72 @@ These tests use Playwright’s `request` fixture rather than a separate HTTP cli
 
 #### 1. Install dependencies
 
-`npm install`
+```bash
+npm install
+```
 
 #### 2. Install Playwright browsers
 
-This wil download the browser binaries (Chromium, Firefox, WebKit) used by Playwright.
+This will download the browser binaries (Chromium, Firefox, WebKit) used by Playwright.
 
-`npx playwright install`
+```bash
+npx playwright install
+```
 
 ## Running Tests
 
 #### Run the full test suite
 
-`npx playwright test`
+```bash
+npx playwright test
+```
 
 #### Run a specific test file
 
-`npx playwright test tests/login.spec.ts`
+```bash
+npx playwright test tests/login.spec.ts
+```
 
 #### Run tests by title
 
-`npx playwright test -g "invalid login"`
+```bash
+npx playwright test -g "invalid login"
+```
 
 #### Run with headed browser (see the UI)
 
-`npx playwright test --headed`
+```bash
+npx playwright test --headed
+```
 
 #### Show the last HTML report
 
 This opens an interactive report showing passed/failed tests, timings, and traces.
 
-`npx playwright show-report`
+```bash
+npx playwright show-report
+```
 
 ---
 
 # Notes on Design
 
-- Functional page model:
-  - Intead of using classes with this, this project uses functions + shared locators in helpers/ to implement page-level behavior. This keeps things simple and explicit while still avoiding duplication.
+Functional page model:
 
-- Separation of concerns:
-  - UI tests focus on user behavior and visible outcomes.
-  - API tests focus on HTTP status codes and JSON payloads.
+- Intead of using classes with this, this project uses functions + shared locators in helpers/ to implement page-level behavior. This keeps things simple and explicit while still avoiding duplication.
 
-- Extensibility:
-  New flows can be added by:
-  - Introducing new helper functions in helpers/
-  - Adding new \*.spec.ts files in tests/ that resuse those helpers
+Separation of concerns:
 
-### Possible Future Enhancements
+- UI tests focus on user behavior and visible outcomes.
+- API tests focus on HTTP status codes and JSON payloads.
+
+Extensibility:
+New flows can be added by:
+
+- Introducing new helper functions in `helpers/`
+- Adding new `\*.spec.ts` files in `tests/` that resuse those helpers
+
+## Possible Future Enhancements
 
 - Add negative API tests (e.g. 404s, validation errors)
 - Add more UI scenarios (sorting, cart behavior, etc.)
