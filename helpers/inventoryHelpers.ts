@@ -4,6 +4,7 @@ const INVENTORY_CONTAINER = "#inventory_container";
 const INVENTORY_ITEM = ".inventory_item";
 const INVENTORY_ITEM_NAME = ".inventory_item_name";
 const CART_BADGE = ".shopping_cart_badge";
+const PRICEBAR = ".pricebar";
 
 export const expectInventoryLoaded = async (page: Page) => {
   await expect(page.locator(INVENTORY_CONTAINER).first()).toBeVisible();
@@ -26,6 +27,16 @@ export const addFirstItemToCart = async (page: Page) => {
   await firstAddButton.click();
 };
 
+export const addRandomItemToCart = async (page: Page) => {
+  const items = page.locator(INVENTORY_ITEM);
+  const count = await items.count();
+  if (count === 0) throw new Error("No inventory items found");
+
+  const randomIndex = Math.floor(Math.random() * count);
+  const addButton = items.nth(randomIndex).locator("button").first();
+  await addButton.click();
+}
+
 export const expectCartCount = async (page: Page, expectedCount: number) => {
   const badge = page.locator(CART_BADGE);
 
@@ -35,4 +46,9 @@ export const expectCartCount = async (page: Page, expectedCount: number) => {
     await expect(badge).toBeVisible();
     await expect(badge).toHaveText(String(expectedCount));
   }
+};
+
+export const removeItemFromCartInInventoryPage = async (page: Page) => {
+  const firstAddedItem = page.locator(`${INVENTORY_ITEM}`).getByRole("button", {name: "remove"});
+  await firstAddedItem.click();
 };
