@@ -42,6 +42,13 @@ UI scenarios include:
    - Logs in successfully
    - Asserts that at least one product is visible on the inventory page
 
+4. **Cart confirmation**
+
+- Asserts that cart button navigation works and cart page loads successfully
+- Asserts that items can be removed
+- Asserts that cart is empty when no items are added
+- Asserts that cart icon count matches actual items on cart page
+
 Locators and common flows are encapsulated as helper functions so tests stay readable and easier to maintain.
 
 ---
@@ -160,7 +167,7 @@ New flows can be added by:
 ## Possible Future Enhancements
 
 - Add negative API tests (e.g. 404s, validation errors)
-- Add more UI scenarios (sorting, cart behavior, etc.)
+- Add more UI scenarios (sorting, etc.)
 - Configure GitHub Actions to run npx playwright test on every push
 - Capture screenshots and traces only on failure for easier debugging
 
