@@ -32,4 +32,5 @@ test("user can remove item from cart", async ({ page }) => {
   await addRandomItemToCart(page);
   await expectCartCount(page, 1);
   await removeItemFromCartInInventoryPage(page);
+  await expectCartCount(page, 0);
 });
