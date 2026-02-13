@@ -1,7 +1,5 @@
-import { test, expect } from "@playwright/test";
-import { login } from "../helpers/loginHelpers";
+import { test, expect } from "./fixtures";
 import {
-  expectInventoryLoaded,
   getInventoryItemsNames,
   addFirstItemToCart,
   expectCartCount,
@@ -9,28 +7,19 @@ import {
   addRandomItemToCart,
 } from "../helpers/inventoryHelpers";
 
-test("inventory shows products after login", async ({ page }) => {
-  await login(page, "standard_user", "secret_sauce");
-  await expectInventoryLoaded(page);
-
-  const names = await getInventoryItemsNames(page);
+test("inventory shows products after login", async ({ loggedInPage }) => {
+  const names = await getInventoryItemsNames(loggedInPage);
   expect(names.length).toBeGreaterThan(0);
 });
 
-test("user can add an item to car", async ({ page }) => {
-  await login(page, "standard_user", "secret_sauce");
-  await expectInventoryLoaded(page);
-
-  await addFirstItemToCart(page);
-  await expectCartCount(page, 1);
+test("user can add an item to cart", async ({ loggedInPage }) => {
+  await addFirstItemToCart(loggedInPage);
+  await expectCartCount(loggedInPage, 1);
 });
 
-test("user can remove item from cart", async ({ page }) => {
-  await login(page, "standard_user", "secret_sauce");
-  await expectInventoryLoaded(page);
-
-  await addRandomItemToCart(page);
-  await expectCartCount(page, 1);
-  await removeItemFromCartInInventoryPage(page);
-  await expectCartCount(page, 0);
+test("user can remove item from cart", async ({ loggedInPage }) => {
+  await addRandomItemToCart(loggedInPage);
+  await expectCartCount(loggedInPage, 1);
+  await removeItemFromCartInInventoryPage(loggedInPage);
+  await expectCartCount(loggedInPage, 0);
 });
