@@ -6,7 +6,7 @@ const LOGIN_BUTTON = "#login-button";
 const ERROR_BANNER = '[data-test="error"]';
 
 export const gotoLogin = async (page: Page) => {
-  await page.goto("https://www.saucedemo.com/");
+  await page.goto("/");
 };
 
 export const fillCredentials = async (
