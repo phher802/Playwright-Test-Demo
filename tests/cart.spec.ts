@@ -1,13 +1,9 @@
 import { test, expect } from "./fixtures";
-import { login } from "../helpers/loginHelpers";
 import {
-  goToCart,
-  expectCartLoaded,
   getCartInventoryItemsNames,
   removeFirstCartItem,
 } from "../helpers/cartHelpers";
 import {
-  expectInventoryLoaded,
   addFirstItemToCart,
   currentCartCount,
   addRandomItemToCart,
