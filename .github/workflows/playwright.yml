@@ -1,4 +1,4 @@
-name: Playwright
+name: Playwright Tests
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run tests
-        run: npm playwright test
+        run: npx playwright test
 
       - name: Upload HTML report
         if: always()
