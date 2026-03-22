@@ -30,6 +30,13 @@ export const getCartInventoryItemsNames = async (
 export const removeFirstCartItem = async (page: Page) => {
   const firstCartItem = page.locator(CART_ITEM).first();
   await expect(firstCartItem).toBeVisible();
-
   await firstCartItem.getByRole("button").click();
+};
+
+export const clearCart = async (page: Page) => {
+  const cartItems = page.locator(CART_ITEM);
+
+  while ((await cartItems.count()) > 0) {
+    await removeFirstCartItem(page);
+  }
 };

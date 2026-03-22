@@ -2,6 +2,7 @@ import { test, expect } from "./fixtures";
 import {
   getCartInventoryItemsNames,
   removeFirstCartItem,
+  clearCart,
 } from "../helpers/cartHelpers";
 import {
   addFirstItemToCart,
@@ -50,11 +51,21 @@ test("cart badge count matches number of added items", async ({
   loggedInPage,
   openCart,
 }) => {
+  const before = await currentCartCount(loggedInPage);
+  console.log("before in cart badge matches", before);
   await addFirstItemToCart(loggedInPage);
+  console.log(
+    "after adding first item to cart",
+    await currentCartCount(loggedInPage),
+  );
   await addRandomItemToCart(loggedInPage);
-  await expectCartCount(loggedInPage, 2);
-  const cartPage = await openCart();
 
+  const after = await currentCartCount(loggedInPage);
+  console.log("after adding random item to cart", after);
+
+  await expectCartCount(loggedInPage, 2);
+
+  const cartPage = await openCart();
   const names = await getCartInventoryItemsNames(cartPage);
   expect(names.length).toBe(2);
 });

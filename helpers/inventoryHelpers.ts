@@ -4,6 +4,7 @@ const INVENTORY_CONTAINER = "#inventory_container";
 const INVENTORY_ITEM = ".inventory_item";
 const INVENTORY_ITEM_NAME = ".inventory_item_name";
 const CART_BADGE = ".shopping_cart_badge";
+const INVENTORY_LIST = ".inventory_list";
 
 export const expectInventoryLoaded = async (page: Page) => {
   await expect(page.locator(INVENTORY_CONTAINER).first()).toBeVisible();
@@ -27,13 +28,17 @@ export const addFirstItemToCart = async (page: Page) => {
 };
 
 export const addRandomItemToCart = async (page: Page) => {
-  const items = page.locator(INVENTORY_ITEM);
-  const count = await items.count();
-  if (count === 0) throw new Error("No inventory items found");
+  await page.waitForSelector(INVENTORY_LIST);
+  const addButtons = page.locator('button[data-test^="add-to-cart-"]');
+  const count = await addButtons.count();
+  if (count === 0)
+    throw new Error(
+      "No add-to-cart buttons found found (maybe already added all items?)",
+    );
 
   const randomIndex = Math.floor(Math.random() * count);
-  const addButton = items.nth(randomIndex).locator("button").first();
-  await addButton.click();
+  const button = addButtons.nth(randomIndex);
+  await button.click();
 };
 
 export const expectCartCount = async (page: Page, expectedCount: number) => {
@@ -48,7 +53,10 @@ export const expectCartCount = async (page: Page, expectedCount: number) => {
 
 export const currentCartCount = async (page: Page) => {
   const badge = page.locator(CART_BADGE);
-  return await badge.count();
+  if ((await badge.count()) === 0) return 0;
+
+  const text = (await badge.textContent())?.trim();
+  return text ? Number(text) : 0;
 };
 
 export const removeItemFromCartInInventoryPage = async (page: Page) => {
