@@ -168,7 +168,6 @@ New flows can be added by:
 
 - Add negative API tests (e.g. 404s, validation errors)
 - Add more UI scenarios (sorting, etc.)
-- Configure GitHub Actions to run npx playwright test on every push
 - Capture screenshots and traces only on failure for easier debugging
 
 If you're reviewing this for a QA / SDET / Test Automation role and would like more context on any design decisions or test cases, feel free to reach out!
