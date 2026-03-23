@@ -13,6 +13,13 @@ export default defineConfig({
     actionTimeout: 10_000,
     baseURL: "https://www.saucedemo.com/",
     trace: "on-first-retry",
+    screenshot: "only-on-failure",
+    video: "retain-on-failure",
   },
-  reporter: [["list"], ["html", { outputFolder: "playwright-report" }]],
+  reporter: [
+    ["list"],
+    ["html", { outputFolder: "playwright-report" }],
+    ["junit", { outputFile: "test-results/junit.xml" }],
+    ["json", { outputFile: "test-results/results.json" }],
+  ],
 });
