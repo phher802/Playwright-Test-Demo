@@ -27,6 +27,37 @@ export const addFirstItemToCart = async (page: Page) => {
   await firstAddButton.click();
 };
 
+export const addItemToCartByTestId = async (page: Page, testId: string) => {
+  const full = testId.startsWith("add-to-cart-")
+    ? testId
+    : `add-to-cart-${testId}`;
+  const button = page.locator(`button[data-test="${full}"]`);
+
+  if ((await button.count()) === 0) {
+    throw new Error(`No add-to-cart button found with data-test="${full}"`);
+  }
+  await button.click();
+};
+
+export const addItemToCartByName = async (page: Page, name: string) => {
+  const item = page.locator(INVENTORY_ITEM, {
+    has: page.locator(INVENTORY_ITEM_NAME, { hasText: name }),
+  });
+
+  if ((await item.count()) === 0) {
+    throw new Error(`No inventory item found with name "${name}`);
+  }
+
+  const addButton = item.locator('button[data-test^="add-to-cart-"]');
+  if ((await addButton.count()) === 0) {
+    throw new Error(
+      `Item "${name}" has no add-to-cart button (maybe already added)`,
+    );
+  }
+
+  await addButton.first().click();
+};
+
 export const addRandomItemToCart = async (page: Page) => {
   await page.waitForSelector(INVENTORY_LIST);
   const addButtons = page.locator('button[data-test^="add-to-cart-"]');
@@ -38,6 +69,8 @@ export const addRandomItemToCart = async (page: Page) => {
 
   const randomIndex = Math.floor(Math.random() * count);
   const button = addButtons.nth(randomIndex);
+  const dataTest = await button.getAttribute("data-test");
+  console.log("Random add button:", dataTest);
   await button.click();
 };
 
