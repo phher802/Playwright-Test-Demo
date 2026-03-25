@@ -2,13 +2,12 @@ import { test, expect } from "./fixtures";
 import {
   getCartInventoryItemsNames,
   removeFirstCartItem,
-  clearCart,
 } from "../helpers/cartHelpers";
 import {
   addFirstItemToCart,
   currentCartCount,
-  addRandomItemToCart,
   expectCartCount,
+  addItemToCartByTestId,
 } from "../helpers/inventoryHelpers";
 
 test("cart shows added products after clicking cart icon", async ({
@@ -58,10 +57,11 @@ test("cart badge count matches number of added items", async ({
     "after adding first item to cart",
     await currentCartCount(loggedInPage),
   );
-  await addRandomItemToCart(loggedInPage);
+
+  await addItemToCartByTestId(loggedInPage, "sauce-labs-fleece-jacket");
 
   const after = await currentCartCount(loggedInPage);
-  console.log("after adding random item to cart", after);
+  console.log("after adding fleece jacket to cart", after);
 
   await expectCartCount(loggedInPage, 2);
 
