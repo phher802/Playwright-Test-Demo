@@ -23,8 +23,12 @@ export const getInventoryItemsNames = async (page: Page): Promise<string[]> => {
 };
 
 export const addFirstItemToCart = async (page: Page) => {
-  const firstAddButton = page.locator(`${INVENTORY_ITEM} button`).first();
-  await firstAddButton.click();
+  const button = page.locator('button[data-test^="add-to-cart-"]').first();
+  await expect(button).toBeVisible();
+
+  await button.click();
+  //wait for state change
+  await expect(button).toHaveAttribute("data-test", /remove-/);
 };
 
 export const addItemToCartByTestId = async (page: Page, testId: string) => {
@@ -33,10 +37,11 @@ export const addItemToCartByTestId = async (page: Page, testId: string) => {
     : `add-to-cart-${testId}`;
   const button = page.locator(`button[data-test="${full}"]`);
 
-  if ((await button.count()) === 0) {
-    throw new Error(`No add-to-cart button found with data-test="${full}"`);
-  }
+  await expect(button).toHaveCount(1);
+  await expect(button).toBeVisible();
+
   await button.click();
+  await expect(button).toHaveAttribute("data-test", /remove-/);
 };
 
 export const addItemToCartByName = async (page: Page, name: string) => {
@@ -44,34 +49,28 @@ export const addItemToCartByName = async (page: Page, name: string) => {
     has: page.locator(INVENTORY_ITEM_NAME, { hasText: name }),
   });
 
-  if ((await item.count()) === 0) {
-    throw new Error(`No inventory item found with name "${name}`);
-  }
+  await expect(item).toHaveCount(1);
 
-  const addButton = item.locator('button[data-test^="add-to-cart-"]');
-  if ((await addButton.count()) === 0) {
-    throw new Error(
-      `Item "${name}" has no add-to-cart button (maybe already added)`,
-    );
-  }
+  const button = item.locator('button[data-test^="add-to-cart-"]').first();
 
-  await addButton.first().click();
+  await button.click();
+  await expect(button).toHaveAttribute("data-test", /remove-/);
 };
 
 export const addRandomItemToCart = async (page: Page) => {
   await page.waitForSelector(INVENTORY_LIST);
-  const addButtons = page.locator('button[data-test^="add-to-cart-"]');
-  const count = await addButtons.count();
-  if (count === 0)
-    throw new Error(
-      "No add-to-cart buttons found found (maybe already added all items?)",
-    );
+  const buttons = page.locator('button[data-test^="add-to-cart-"]');
+  const count = await buttons.count();
+
+  if (count === 0) throw new Error("No add-to-cart buttons found");
 
   const randomIndex = Math.floor(Math.random() * count);
-  const button = addButtons.nth(randomIndex);
+  const button = buttons.nth(randomIndex);
   const dataTest = await button.getAttribute("data-test");
   console.log("Random add button:", dataTest);
+
   await button.click();
+  await expect(button).toHaveAttribute("data-test", /remove-/);
 };
 
 export const expectCartCount = async (page: Page, expectedCount: number) => {
@@ -92,9 +91,13 @@ export const currentCartCount = async (page: Page) => {
   return text ? Number(text) : 0;
 };
 
-export const removeItemFromCartInInventoryPage = async (page: Page) => {
-  const firstAddedItem = page
-    .locator(`${INVENTORY_ITEM}`)
-    .getByRole("button", { name: "remove" });
-  await firstAddedItem.click();
+export const removeFirstItemFromCartInInventoryPage = async (page: Page) => {
+  const removeButton = page.locator('button[data-test^="remove-"]').first();
+
+  await expect(removeButton).toHaveCount(1);
+
+  await expect(removeButton).toBeVisible();
+  await removeButton.click();
+
+  await expect(removeButton).toHaveAttribute("data-test", /add-to-cart-/);
 };
