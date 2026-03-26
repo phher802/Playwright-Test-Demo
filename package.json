@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "playwright test"
+    "test": "playwright test",
+    "dashboard": "node scripts/generate-dashboard.js",
+    "test:dashboard": "npm test && npm run dashboard"
   },
   "keywords": [],
   "author": "",

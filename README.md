@@ -168,6 +168,5 @@ New flows can be added by:
 
 - Add negative API tests (e.g. 404s, validation errors)
 - Add more UI scenarios (sorting, etc.)
-- Capture screenshots and traces only on failure for easier debugging
 
 If you're reviewing this for a QA / SDET / Test Automation role and would like more context on any design decisions or test cases, feel free to reach out!

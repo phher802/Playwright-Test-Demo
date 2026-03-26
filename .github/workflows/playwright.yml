@@ -37,10 +37,22 @@ jobs:
       - name: Run tests
         run: npx playwright test
 
+      - name: Generate dashboard
+        if: always()
+        run: node scripts/generate-dashboard.js
+
       - name: Upload HTML report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report/
+          retention-days: 14
+
+      - name: Upload dashboard
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dashboard
+          path: dashboard/
           retention-days: 14
