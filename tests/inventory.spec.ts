@@ -3,7 +3,7 @@ import {
   getInventoryItemsNames,
   addFirstItemToCart,
   expectCartCount,
-  removeItemFromCartInInventoryPage,
+  removeFirstItemFromCartInInventoryPage,
   addItemToCartByName,
 } from "../helpers/inventoryHelpers";
 import {
@@ -34,6 +34,6 @@ test("user can remove item from cart from the inventory page", async ({
   await continueShopping(loggedInPage);
 
   await expectCartCount(loggedInPage, 1);
-  await removeItemFromCartInInventoryPage(loggedInPage);
+  await removeFirstItemFromCartInInventoryPage(loggedInPage);
   await expectCartCount(loggedInPage, 0);
 });

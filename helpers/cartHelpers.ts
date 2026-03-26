@@ -7,13 +7,15 @@ const CART_LINK = ".shopping_cart_link";
 const CONTINUE_SHOPPING = "#continue-shopping";
 
 export const goToCart = async (page: Page) => {
-  await page.click(CART_LINK);
+  await page.locator(CART_LINK).click();
+  await expect(page).toHaveURL(/cart\.html/);
+  await expect(page.locator(CART_CONTAINER)).toBeVisible();
 };
 
 export const continueShopping = async (page: Page) => {
-  const button = page.locator(CONTINUE_SHOPPING);
-  await expect(button).toBeVisible();
-  await button.click();
+  await page.locator(CONTINUE_SHOPPING).click();
+  await expect(page).toHaveURL(/inventory\.html/);
+  await expect(page.locator(".inventory_list")).toBeVisible();
 };
 
 export const expectCartLoaded = async (page: Page) => {
@@ -23,32 +25,29 @@ export const expectCartLoaded = async (page: Page) => {
 export const getCartInventoryItemsNames = async (
   page: Page,
 ): Promise<string[]> => {
-  const items = page.locator(CART_INVENTORY_ITEM_NAME);
-  const count = await items.count();
-  const names: string[] = [];
-
-  for (let i = 0; i < count; i++) {
-    names.push((await items.nth(i).textContent()) ?? "");
-  }
-
-  return names.filter(Boolean);
+  const names = await page.locator(CART_INVENTORY_ITEM_NAME).allTextContents();
+  return names.map((n) => n.trim()).filter(Boolean);
 };
 
 export const removeFirstCartItem = async (page: Page) => {
-  const firstCartItem = page.locator(CART_ITEM).first();
-  await expect(firstCartItem).toBeVisible();
-  const removeButton = firstCartItem.locator('button[data-test^="remove-"]');
+  const cartItems = page.locator(CART_ITEM);
+  const before = await cartItems.count();
+  if (before == 0) return;
+
+  const firstItem = cartItems.first();
+  const removeButton = firstItem.locator('button[data-test^="remove-"]');
+
   await expect(removeButton).toBeVisible();
   await removeButton.click();
+
+  await expect(cartItems).toHaveCount(before - 1);
 };
 
 export const clearCart = async (page: Page) => {
   const cartItems = page.locator(CART_ITEM);
 
   while ((await cartItems.count()) > 0) {
-    const before = await cartItems.count();
     await removeFirstCartItem(page);
-    await expect(cartItems).toHaveCount(before - 1);
   }
 
   await expect(cartItems).toHaveCount(0);
